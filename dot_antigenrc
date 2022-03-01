@@ -1,0 +1,37 @@
+# antigen configuration
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundles <<EOBUNDLES
+  command-not-found
+  git
+  git-extras
+  git-flow
+  github
+  nvm
+  npm
+  colored-man-pages
+  colorize
+  docker
+  docker-compose
+  brew
+  gatsby
+  macos
+  node
+  sdk
+  sudo
+  web-search
+  vscode
+  yarn
+  zsh-z
+  zsh-users/zsh-completions
+  zsh-users/zsh-autosuggestions
+  zsh-users/zsh-syntax-highlighting
+EOBUNDLES
+
+# Load the theme.
+antigen theme romkatv/powerlevel10k
+
+# Tell Antigen that you're done.
+antigen apply
