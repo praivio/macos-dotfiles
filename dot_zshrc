@@ -83,8 +83,6 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins+=(
-)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -140,15 +138,18 @@ export SSH_KEY_FILE=/Users/perttu/.ssh/id_bitbucket
 # Santa Monica stuff
 
 export ELISA_SMN_HOME=/Users/perttu/Elisa/smn
-export ELISA_SMN_DEV_HOME=$ELISA_SMN_HOME/smn-dev
-export ELISA_SMN_DOCKER_COMPOSE_CONFIG=$ELISA_SMN_DEV_HOME/docker-compose.yml
 
-export SSH_PRIVATE_KEY=$(cd $ELISA_SMN_DEV_HOME && npm run --silent getkey)
+if [[ -d $ELISA_SMN_HOME ]]; then
+   export ELISA_SMN_DEV_HOME=$ELISA_SMN_HOME/smn-dev
+   export ELISA_SMN_DOCKER_COMPOSE_CONFIG=$ELISA_SMN_DEV_HOME/docker-compose.yml
 
-alias smncd="cd $ELISA_SMN_DEV_HOME"
-alias smnnpmci='for dir in $(ls */package.json | sed "s/\/.*//"); do (cd $dir && npm ci); done'
-alias smnps="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG ps"
-alias smnup="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG up -d"
+   export SSH_PRIVATE_KEY=$(cd $ELISA_SMN_DEV_HOME && npm run --silent getkey)
+
+   alias smncd="cd $ELISA_SMN_DEV_HOME"
+   alias smnnpmci='for dir in $(ls */package.json | sed "s/\/.*//"); do (cd $dir && npm ci); done'
+   alias smnps="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG ps"
+   alias smnup="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG up -d"
+fi
 
 # pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -165,13 +166,4 @@ export SDKMAN_DIR="/Users/perttu/.sdkman"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
-
-
-
-
-
-
-
 
