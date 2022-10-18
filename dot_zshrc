@@ -1,6 +1,5 @@
-
 #### ANTIGEN CONFIGURATION ####
-source /usr/local/opt/antigen/share/antigen/antigen.zsh
+source $(brew --prefix)/share/antigen/antigen.zsh
 antigen init ~/.antigenrc
 #### END ANTIGEN CONFIGURATION ####
 
@@ -133,11 +132,11 @@ alias mongodown="brew services stop mongodb-community"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-export SSH_KEY_FILE=/Users/perttu/.ssh/id_bitbucket
+export SSH_KEY_FILE=$HOME/.ssh/id_rsa
 
 # Santa Monica stuff
 
-export ELISA_SMN_HOME=/Users/perttu/Elisa/smn
+export ELISA_SMN_HOME=$HOME/Elisa/smn
 
 if [[ -d $ELISA_SMN_HOME ]]; then
    export ELISA_SMN_DEV_HOME=$ELISA_SMN_HOME/smn-dev
@@ -159,11 +158,17 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS='--height 40% --preview="cat {}" --preview-window=right:60%:wrap'
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/perttu/.sdkman"
-[[ -s "/Users/perttu/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/perttu/.sdkman/bin/sdkman-init.sh"
-[ -f "/Users/perttu/.ghcup/env" ] && source "/Users/perttu/.ghcup/env" # ghcup-env
+export AWS_ACCESS_KEY_ID=AKIAXG4INIL3V45LXAUR
+export AWS_SECRET_ACCESS_KEY=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
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 

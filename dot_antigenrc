@@ -24,6 +24,7 @@ antigen bundles <<EOBUNDLES
   web-search
   vscode
   yarn
+  z
   zsh-z
   zsh-users/zsh-completions
   zsh-users/zsh-autosuggestions
