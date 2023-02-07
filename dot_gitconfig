@@ -6,6 +6,8 @@
 	name = Perttu Raivio
 
 [core]
-	excludesfile = /Users/perttu/.gitignore
+	excludesfile = /Users/perttu.raivio/.gitignore
 [pull]
 	rebase = true
+[status]
+	showStash = true
