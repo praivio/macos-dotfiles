@@ -50,7 +50,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # export ARCHFLAGS="-arch x86_64"
 
 # Source aliases from separate aliases dotfile
-source ~/.zsh_aliases
+source $HOME/.zsh_aliases
 
 force_master_pull() {
    cd $1 &&
