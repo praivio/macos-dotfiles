@@ -24,12 +24,6 @@ export PATH=$HOME/bin:/usr/local/sbin:/usr/local/opt/openssl/bin:$PATH
 # ZSH_THEME="robbyrussell"
 # ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # You can set one of the optional three formats:
@@ -37,15 +31,6 @@ export PATH=$HOME/bin:/usr/local/sbin:/usr/local/opt/openssl/bin:$PATH
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
 HIST_STAMPS="yyyy-mm-dd"
-
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
-# Antigen in use
-# source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -65,7 +50,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # export ARCHFLAGS="-arch x86_64"
 
 # Source aliases from separate aliases dotfile
-source $HOME/.zsh_aliases
+source ~/.zsh_aliases
 
 force_master_pull() {
    cd $1 &&
