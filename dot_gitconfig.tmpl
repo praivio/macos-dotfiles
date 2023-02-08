@@ -1,0 +1,11 @@
+# This is Git's per-user configuration file.
+[user]
+	name = {{ .fullName }}
+	email = {{ .email }} 
+
+[core]
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
+[pull]
+	rebase = true
+[status]
+	showStash = true
