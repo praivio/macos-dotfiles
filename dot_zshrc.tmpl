@@ -33,7 +33,8 @@ export NVM_DIR="$HOME/.nvm"
 export SSH_KEY_FILE=$HOME/.ssh/id_rsa
 
 {{- if eq .chezmoi.hostname "A-TDYYQV46V1" }}
-# Santa Monica stuff
+
+# work laptop stuff
 
 export ELISA_SMN_HOME=$HOME/Elisa/smn
 
@@ -46,6 +47,9 @@ if [[ -d $ELISA_SMN_HOME ]]; then
    alias smnps="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG ps"
    alias smnup="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG up -d"
 fi
+
+# end of work laptop stuff
+
 {{- end }}
 
 # pyenv
