@@ -16,7 +16,6 @@ antigen bundles <<EOBUNDLES
   docker
   docker-compose
   brew
-  gatsby
   macos
   node
   sdk
