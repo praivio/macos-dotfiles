@@ -1,13 +1,12 @@
 # ~/.zshrc — managed by chezmoi (macos-dotfiles)
 # Machine: {{ .machine }} | Profile applied: {{ now | date "2006-01-02" }}
 
-# ── Powerlevel10k instant prompt ──────────────────────────────────────────────
-# Must be near the top of ~/.zshrc. Keep any console-interactive code above this.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# ── Terminal settings ─────────────────────────────────────────────────────────
+# Must be before the instant prompt preamble — writes escape sequences to terminal.
+tabs -2
 
 # ── Homebrew ──────────────────────────────────────────────────────────────────
+# Must be before instant prompt preamble so antigen (which needs brew) loads first.
 if [[ "$(uname -m)" == "arm64" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 else
@@ -15,8 +14,17 @@ else
 fi
 
 # ── antigen (plugin manager) ──────────────────────────────────────────────────
+# Loaded before the instant prompt preamble: antigen can write to stdout on first
+# run or when updating plugins, which would trigger the p10k console output warning.
 source "$(brew --prefix)/share/antigen/antigen.zsh"
 antigen init ~/.antigenrc
+
+# ── Powerlevel10k instant prompt ──────────────────────────────────────────────
+# Everything above this line is allowed to produce console output.
+# Everything below must not write to the terminal during initialisation.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # ── GNU tools (use without 'g' prefix) ───────────────────────────────────────
 export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:$PATH"
@@ -27,8 +35,8 @@ export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
 # ── nvm ───────────────────────────────────────────────────────────────────────
 export NVM_DIR="$HOME/.nvm"
-[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ]                          && source "$(brew --prefix)/opt/nvm/nvm.sh"
-[ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ]       && source "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm"
+[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ]                        && source "$(brew --prefix)/opt/nvm/nvm.sh"
+[ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ]     && source "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm"
 
 # ── pyenv ─────────────────────────────────────────────────────────────────────
 export PYENV_ROOT="$HOME/.pyenv"
@@ -64,10 +72,9 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
 setopt SHARE_HISTORY
 
-# ── ssh ───────────────────────────────────────────────────────────────────────
-# If using 1Password SSH agent, it manages keys automatically.
-# Otherwise, load your key manually:
-#   ssh-add ~/.ssh/id_ed25519
+# ── ssh (1Password SSH agent) ────────────────────────────────────────────────
+# 1Password manages SSH keys via its agent. If not using 1Password, comment this
+# out and add your key manually: ssh-add ~/.ssh/id_ed25519
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
 # ── aliases ───────────────────────────────────────────────────────────────────
@@ -86,9 +93,6 @@ alias bup='brew update && brew upgrade && brew cleanup'
 CONFIG_DIR="${HOME}/.local/share/macos-config"
 PROFILE="{{ .machine }}"
 alias brewup="brew bundle --no-lock --file=${CONFIG_DIR}/Brewfile.common && brew bundle --no-lock --file=${CONFIG_DIR}/Brewfile.${PROFILE}"
-
-# ── tab width ─────────────────────────────────────────────────────────────────
-tabs -2
 
 # ── terraform completions ─────────────────────────────────────────────────────
 autoload -U +X bashcompinit && bashcompinit
@@ -129,6 +133,5 @@ force_master_pull() {
 {{- end }}
 
 # ── local overrides (not tracked by chezmoi) ──────────────────────────────────
-# Put machine-specific secrets and overrides in ~/.zshrc.local
-# That file is intentionally not managed by chezmoi.
+# Put machine-specific secrets and overrides in ~/.zshrc.local — not tracked by chezmoi.
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
