@@ -1,11 +1,20 @@
-{{- $email := promptStringOnce . "email" "Email address" -}}
-{{- $fullName := promptStringOnce . "fullName" "Full name" -}}
+{{- $machine  := promptChoiceOnce . "machine"  "Machine type" (list "work" "personal") -}}
+{{- $name     := promptStringOnce  . "name"     "Full name (for git config)" -}}
+{{- $email    := promptStringOnce  . "email"    "Email address (for git config)" -}}
 
 [data]
-    email = {{ $email | quote }}
-    fullName = {{ $fullName | quote }}
+  machine = {{ $machine | quote }}
+  name    = {{ $name    | quote }}
+  email   = {{ $email   | quote }}
 
+# 1Password CLI integration — requires `op` to be installed and signed in.
+# Install: brew install 1password-cli
+# Sign in: eval "$(op signin)"
+[onepassword]
+  prompt = false
+
+# Don't auto-commit/push — manage the dotfiles repo manually.
 [git]
-    autoCommit = true
-    autoPush = true
+  autoCommit = false
+  autoPush   = false
 

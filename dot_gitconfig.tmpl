@@ -1,11 +1,66 @@
-# This is Git's per-user configuration file.
+# ~/.gitconfig — managed by chezmoi (macos-dotfiles)
+# Name and email are prompted once during `chezmoi init`.
+
 [user]
-	name = {{ .fullName }}
-	email = {{ .email }} 
+  name  = {{ .name }}
+  email = {{ .email }}
 
 [core]
-	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
+  editor        = emacs -nw
+  autocrlf      = input
+  whitespace    = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  excludesfile  = {{ .chezmoi.homeDir }}/.gitignore
+
+[init]
+  defaultBranch = main
+
 [pull]
-	rebase = true
+  rebase = true
+
+[push]
+  default = current
+
+[fetch]
+  prune = true
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  algorithm = histogram
+
+[rebase]
+  autoStash = true
+
 [status]
-	showStash = true
+  showStash = true
+
+[alias]
+  # log
+  lg    = log --oneline --graph --decorate --all
+  last  = log -1 HEAD --stat
+
+  # convenience
+  st    = status -sb
+  co    = checkout
+  br    = branch
+  unstage = reset HEAD --
+
+  # undo last commit but keep changes staged
+  undo  = reset --soft HEAD~1
+
+  # list branches sorted by last commit date
+  brs   = branch --sort=-committerdate --format='%(committerdate:short) %(refname:short)'
+
+[color]
+  ui = auto
+
+[credential]
+  helper = osxkeychain
+
+{{ if eq .machine "work" -}}
+# Work-specific git identity — applies inside ~/work/ directory trees.
+# Edit ~/.gitconfig.work for work name/email overrides.
+[includeIf "gitdir:~/work/"]
+  path = ~/.gitconfig.work
+{{- end }}

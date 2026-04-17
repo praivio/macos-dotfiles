@@ -1,0 +1,43 @@
+# ~/.zsh_aliases — managed by chezmoi (macos-dotfiles)
+# Machine: {{ .machine }}
+
+# ── navigation ────────────────────────────────────────────────────────────────
+alias pd=pushd
+alias viz="$EDITOR $HOME/.zshrc"
+alias siz="source $HOME/.zshrc"
+
+# ── file listing (eza = modern exa replacement) ───────────────────────────────
+alias ls='eza -l --group-directories-first --color=auto --git --icons --no-permissions --no-user'
+alias ll='eza -lahF --group-directories-first --color=auto --git --icons'
+alias tree='eza --tree'
+
+# ── safer defaults ────────────────────────────────────────────────────────────
+alias cat='bat --paging=never'
+alias grep='grep --color=auto'
+alias top='htop'
+
+# ── git ───────────────────────────────────────────────────────────────────────
+alias gs='git status -sb'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph --decorate'
+alias gd='git diff'
+alias gco='git checkout'
+
+# ── databases (local dev) ─────────────────────────────────────────────────────
+alias pgup="pg_ctl -D /usr/local/var/postgres start"
+alias pgdown="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
+alias mongoup="brew services start mongodb-community"
+alias mongodown="brew services stop mongodb-community"
+
+{{ if eq .machine "work" -}}
+# ── work: VPN / SSH tunnels ───────────────────────────────────────────────────
+# Update hostnames to match your current work setup.
+# alias shuttleshuriken='sshuttle -r ext-praivio@scsportalci shuriken.saunalahti.fi -N'
+# alias shuttlexsoar='sshuttle -r ext-praivio@scsportaltest soar-lab-test.sampo.elisa.fi:2503'
+
+# ── work: project shortcuts ───────────────────────────────────────────────────
+# Add project-specific cd aliases here, e.g.:
+# alias projcd='cd ~/work/my-project'
+{{- end }}

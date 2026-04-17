@@ -1,37 +1,32 @@
-# antigen configuration
-# Load the oh-my-zsh's library.
+# ~/.antigenrc — managed by chezmoi (macos-dotfiles)
+# antigen plugin configuration — loaded by ~/.zshrc via `antigen init ~/.antigenrc`
+
 antigen use oh-my-zsh
 
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundles <<EOBUNDLES
   command-not-found
-  git
-  git-extras
-  git-flow
-  github
-  nvm
-  npm
   colored-man-pages
   colorize
+  git
+  git-extras
   docker
   docker-compose
   brew
   macos
   node
-  sdk
+  npm
+  nvm
+  yarn
   sudo
   web-search
-  vscode
-  yarn
   z
-  zsh-z
   zsh-users/zsh-completions
   zsh-users/zsh-autosuggestions
   zsh-users/zsh-syntax-highlighting
+  zsh-users/zsh-history-substring-search
 EOBUNDLES
 
-# Load the theme.
+# Load the Powerlevel10k theme
 antigen theme romkatv/powerlevel10k
 
-# Tell Antigen that you're done.
 antigen apply

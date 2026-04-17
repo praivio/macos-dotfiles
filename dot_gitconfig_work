@@ -1,0 +1,19 @@
+# ~/.gitconfig.work — work-specific git identity
+# Included by ~/.gitconfig for repos under ~/work/
+# Managed by chezmoi (macos-dotfiles). Edit with: chezmoi edit ~/.gitconfig.work
+#
+# Override name/email for work commits, and add work-specific settings.
+
+[user]
+  # name  = Perttu Raivio
+  # email = perttu.raivio@yourcompany.com
+
+# Work-specific signing (uncomment and configure if needed)
+# [commit]
+#   gpgSign = true
+# [user]
+#   signingKey = YOUR_KEY_ID
+
+# Work proxy or registry overrides (uncomment as needed)
+# [url "git@github.yourcompany.com:"]
+#   insteadOf = https://github.yourcompany.com/

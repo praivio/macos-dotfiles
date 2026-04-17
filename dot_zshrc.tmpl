@@ -1,86 +1,134 @@
-#### ANTIGEN CONFIGURATION ####
-source $(brew --prefix)/share/antigen/antigen.zsh
-antigen init ~/.antigenrc
-#### END ANTIGEN CONFIGURATION ####
+# ~/.zshrc — managed by chezmoi (macos-dotfiles)
+# Machine: {{ .machine }} | Profile applied: {{ .chezmoi.now | date "2006-01-02" }}
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# ── Powerlevel10k instant prompt ──────────────────────────────────────────────
+# Must be near the top of ~/.zshrc. Keep any console-interactive code above this.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH=$HOME/bin:/usr/local/sbin:/usr/local/opt/openssl/bin:$PATH
-
-HIST_STAMPS="yyyy-mm-dd"
-
-# Source aliases from separate aliases dotfile
-source $HOME/.zsh_aliases
-
-force_master_pull() {
-   cd $1 &&
-   git restore . &&
-   git checkout master &&
-   git pull &&
-   npm install &&
-   popd
-}
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-export SSH_KEY_FILE=$HOME/.ssh/id_rsa
-
-{{- if eq .chezmoi.hostname "A-TDYYQV46V1" }}
-
-# work laptop stuff
-
-export ELISA_SMN_HOME=$HOME/Elisa/smn
-
-if [[ -d $ELISA_SMN_HOME ]]; then
-   export ELISA_SMN_DEV_HOME=$ELISA_SMN_HOME/smn-dev
-   export ELISA_SMN_DOCKER_COMPOSE_CONFIG=$ELISA_SMN_DEV_HOME/docker-compose.yml
-
-   alias smncd="cd $ELISA_SMN_DEV_HOME"
-   alias smnnpmci='for dir in $(ls */package.json | sed "s/\/.*//"); do (cd $dir && npm ci); done'
-   alias smnps="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG ps"
-   alias smnup="docker-compose -f $ELISA_SMN_DOCKER_COMPOSE_CONFIG up -d"
+# ── Homebrew ──────────────────────────────────────────────────────────────────
+if [[ "$(uname -m)" == "arm64" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-# end of work laptop stuff
+# ── antigen (plugin manager) ──────────────────────────────────────────────────
+source "$(brew --prefix)/share/antigen/antigen.zsh"
+antigen init ~/.antigenrc
 
-{{- end }}
+# ── GNU tools (use without 'g' prefix) ───────────────────────────────────────
+export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:$PATH"
+export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
 
-# pyenv
-if command -v pyenv 1>/dev/null 2>&1; then
+# ── PATH additions ────────────────────────────────────────────────────────────
+export PATH="$HOME/bin:/usr/local/sbin:$PATH"
+
+# ── nvm ───────────────────────────────────────────────────────────────────────
+export NVM_DIR="$HOME/.nvm"
+[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ]                          && source "$(brew --prefix)/opt/nvm/nvm.sh"
+[ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ]       && source "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm"
+
+# ── pyenv ─────────────────────────────────────────────────────────────────────
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv &>/dev/null; then
   eval "$(pyenv init -)"
 fi
 
+# ── java ──────────────────────────────────────────────────────────────────────
+export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
+
+# ── z (frecent directory jumps) ───────────────────────────────────────────────
+source "$(brew --prefix)/etc/profile.d/z.sh" 2>/dev/null || true
+
+# ── fzf ───────────────────────────────────────────────────────────────────────
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS='--height 40% --preview="cat {}" --preview-window=right:60%:wrap'
 
-export AWS_ACCESS_KEY_ID=AKIAXG4INIL3V45LXAUR
-export AWS_SECRET_ACCESS_KEY=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
+# ── hstr (Ctrl-R history browser) ────────────────────────────────────────────
+export HSTR_CONFIG=hicolor
+bindkey -s "\C-r" "\C-a hstr -- \C-j"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# ── editor ────────────────────────────────────────────────────────────────────
+export EDITOR="emacs -nw"
+export VISUAL="emacs"
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
+# ── history ───────────────────────────────────────────────────────────────────
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE="$HOME/.zsh_history"
+HIST_STAMPS="yyyy-mm-dd"
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt SHARE_HISTORY
 
-# Tab width
+# ── ssh ───────────────────────────────────────────────────────────────────────
+# If using 1Password SSH agent, it manages keys automatically.
+# Otherwise, load your key manually:
+#   ssh-add ~/.ssh/id_ed25519
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+# ── aliases ───────────────────────────────────────────────────────────────────
+source "$HOME/.zsh_aliases"
+
+# ── chezmoi shortcuts ─────────────────────────────────────────────────────────
+alias cz='chezmoi'
+alias czd='chezmoi diff'
+alias cza='chezmoi apply'
+alias cze='chezmoi edit'
+alias czu='chezmoi update'
+
+# ── brew shortcuts ────────────────────────────────────────────────────────────
+alias bup='brew update && brew upgrade && brew cleanup'
+
+CONFIG_DIR="${HOME}/.local/share/macos-config"
+PROFILE="{{ .machine }}"
+alias brewup="brew bundle --no-lock --file=${CONFIG_DIR}/Brewfile.common && brew bundle --no-lock --file=${CONFIG_DIR}/Brewfile.${PROFILE}"
+
+# ── tab width ─────────────────────────────────────────────────────────────────
 tabs -2
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# ── terraform completions ─────────────────────────────────────────────────────
+autoload -U +X bashcompinit && bashcompinit
+if command -v terraform &>/dev/null; then
+  complete -o nospace -C "$(brew --prefix)/bin/terraform" terraform
+fi
+
+# ── powerlevel10k theme ───────────────────────────────────────────────────────
+[[ \! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# ── work-specific configuration ───────────────────────────────────────────────
+{{ if eq .machine "work" -}}
+
+# sdkman (Java version manager)
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+# Work project helpers
+force_master_pull() {
+  cd "$1" &&
+  git restore . &&
+  git checkout master &&
+  git pull &&
+  npm install &&
+  popd
+}
 
-# HSTR configuration - add this to ~/.zshrc
-alias hh=hstr                    # hh to be alias for hstr
-setopt histignorespace           # skip cmds w/ leading space from history
-export HSTR_CONFIG=hicolor       # get more colors
-bindkey -s "\C-r" "\C-a hstr -- \C-j"     # bind hstr to Ctrl-r (for Vi mode check doc)
+# AWS credentials — stored in 1Password.
+# To set up: create an item named "AWS CLI" in your "Work" vault with fields:
+#   access_key_id, secret_access_key
+# Then uncomment the lines below:
+#
+# export AWS_ACCESS_KEY_ID="$(op read "op://Work/AWS CLI/access_key_id")"
+# export AWS_SECRET_ACCESS_KEY="$(op read "op://Work/AWS CLI/secret_access_key")"
+#
+# Alternatively, use AWS SSO: aws configure sso
 
+{{- end }}
+
+# ── local overrides (not tracked by chezmoi) ──────────────────────────────────
+# Put machine-specific secrets and overrides in ~/.zshrc.local
+# That file is intentionally not managed by chezmoi.
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
