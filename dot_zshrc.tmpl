@@ -97,7 +97,7 @@ if command -v terraform &>/dev/null; then
 fi
 
 # ── powerlevel10k theme ───────────────────────────────────────────────────────
-[[ \! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # ── work-specific configuration ───────────────────────────────────────────────
 {{ if eq .machine "work" -}}
