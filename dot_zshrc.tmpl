@@ -92,7 +92,7 @@ alias bup='brew update && brew upgrade && brew cleanup'
 
 CONFIG_DIR="${HOME}/.local/share/macos-config"
 PROFILE="{{ .machine }}"
-alias brewup="brew bundle --no-lock --file=${CONFIG_DIR}/Brewfile.common && brew bundle --no-lock --file=${CONFIG_DIR}/Brewfile.${PROFILE}"
+alias brewup="brew bundle --file=${CONFIG_DIR}/Brewfile.common && brew bundle --file=${CONFIG_DIR}/Brewfile.${PROFILE}"
 
 # ── terraform completions ─────────────────────────────────────────────────────
 autoload -U +X bashcompinit && bashcompinit
